@@ -4,10 +4,10 @@
 resource "azurerm_monitor_metric_alert" "metric_alert" {
   for_each = var.metric_alerts
 
-  name        = coalesce(each.value.custom_name, data.azurecaf_name.metric_alerts[each.key].result)
+  name        = coalesce(each.value.custom_name, data.azurenoopsutils_resource_name.metric_alerts[each.key].result)
   description = each.value.description
 
-  resource_group_name = coalesce(each.value.resource_group_name, var.resource_group_name)
+  resource_group_name = coalesce(each.value.resource_group_name, local.resource_group_name)
   scopes              = each.value.scopes
 
   enabled       = each.value.enabled
@@ -92,5 +92,5 @@ resource "azurerm_monitor_metric_alert" "metric_alert" {
     }
   }
 
-  tags = merge(local.default_tags, var.extra_tags, each.value.tags)
+  tags = merge(local.default_tags, var.add_tags, each.value.tags)
 }

@@ -21,3 +21,78 @@ More details are available in the [CONTRIBUTING.md](./CONTRIBUTING.md#pull-reque
 
 - [Activity Log alerts](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-activity-log)
 - [Service Alerts](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-service-health)
+
+## Usage
+
+```hcl
+
+module "mod_service_alerts" {
+  source = "azurenoops/overlays-service-alerts/azurerm"
+  version = "0.1.0"
+
+  # Resource Group
+  existing_resource_group_name = azurerm_resource_group.rg.name
+  location                     = azurerm_resource_group.rg.location
+  org_name                     = var.org_name
+  environment                  = var.environment
+  deploy_environment           = var.deploy_environment
+  workload_name                = var.workload_name
+
+  action_group_short_name = "Alerting"
+
+  action_group_webhooks = {
+    PagerDuty = "https://events.pagerduty.com/integration/{integration-UID}/enqueue"
+    Slack     = "https://hooks.slack.com/services/{azerty}/XXXXXXXXXXXXXXx/{hook-key}"
+  }
+
+  # Service Alerts
+  service_alerts = [
+    {
+      name = "Service Alert 1"
+      description = "Service Alert 1 Description"
+      severity = "Sev1"
+      enabled = true
+      scopes = [
+        "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-00000000-0000-0000-0000-000000000000/providers/Microsoft.Compute/virtualMachines/vm-00000000-0000-0000-0000-000000000000"
+      ]
+      conditions = [
+        {
+          field = "Status"
+          operator = "Equals"
+          values = ["Unavailable"]
+        }
+      ]
+      actions = [
+        {
+          action_group_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-00000000-0000-0000-0000-000000000000/providers/microsoft.insights/actionGroups/ag-00000000-0000-0000-0000-000000000000"
+        }
+      ]
+    }
+  ]
+
+  # Activity Log Alerts
+  activity_log_alerts = [
+    {
+      name = "Activity Log Alert 1"
+      description = "Activity Log Alert 1 Description"
+      enabled = true
+      scopes = [
+        "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-00000000-0000-0000-0000-000000000000/providers/Microsoft.Compute/virtualMachines/vm-00000000-0000-0000-0000-000000000000"
+      ]
+      conditions = [
+        {
+          field = "category"
+          operator = "Equals"
+          values = ["Administrative"]
+        }
+      ]
+      actions = [
+        {
+          action_group_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-00000000-0000-0000-0000-000000000000/providers/microsoft.insights/actionGroups/ag-00000000-0000-0000-0000-000000000000"
+        }
+        ]
+    }
+    ]
+}
+    
+```

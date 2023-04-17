@@ -4,10 +4,10 @@
 resource "azurerm_monitor_activity_log_alert" "activity_log_alert" {
   for_each = var.activity_log_alerts
 
-  name        = coalesce(each.value.custom_name, data.azurecaf_name.activity_log_alerts[each.key].result)
+  name        = coalesce(each.value.custom_name, data.azurenoopsutils_resource_name.activity_log_alerts[each.key].result)
   description = each.value.description
 
-  resource_group_name = coalesce(each.value.resource_group_name, var.resource_group_name)
+  resource_group_name = coalesce(each.value.resource_group_name, local.resource_group_name)
   scopes              = each.value.scopes
 
   criteria {
@@ -39,5 +39,5 @@ resource "azurerm_monitor_activity_log_alert" "activity_log_alert" {
     }
   }
 
-  tags = merge(local.default_tags, var.extra_tags)
+  tags = merge(local.default_tags, var.add_tags)
 }

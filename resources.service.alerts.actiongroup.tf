@@ -3,7 +3,7 @@
 
 resource "azurerm_monitor_action_group" "action_group_notification" {
   name                = local.action_group_name
-  resource_group_name = var.resource_group_name
+  resource_group_name = local.resource_group_name
   short_name          = var.action_group_short_name
 
   dynamic "webhook_receiver" {
@@ -25,5 +25,5 @@ resource "azurerm_monitor_action_group" "action_group_notification" {
     }
   }
 
-  tags = merge(local.default_tags, var.extra_tags)
+  tags = merge(local.default_tags, var.add_tags)
 }
