@@ -50,7 +50,7 @@ variable "create_alerts_resource_group" {
 }
 
 variable "existing_resource_group_name" {
-  description = "The name of the existing resource group to use. If not set, the name will be generated using the `org_name`, `workload_name`, `deploy_environment` and `environment` variables."
+  description = "The name of the existing resource group to use for action group. If not set, the name will be generated using the `org_name`, `workload_name`, `deploy_environment` and `environment` variables."
   type        = string
   default     = null
 }
@@ -64,6 +64,11 @@ variable "use_location_short_name" {
 ###########################
 # Alerts Configuration   ##
 ###########################
+
+variable "monitoring_resource_group_name" {
+  description = "Resource group name."
+  type        = string
+}
 
 variable "action_group_webhooks" {
   description = "Map of Webhooks to notify. Example: `{ PagerDuty = 'https://events.pagerduty.com/integration/abcdefgh12345azerty/enqueue' }`."

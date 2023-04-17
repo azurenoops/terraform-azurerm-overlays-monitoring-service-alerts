@@ -7,7 +7,7 @@ resource "azurerm_monitor_metric_alert" "metric_alert" {
   name        = coalesce(each.value.custom_name, data.azurenoopsutils_resource_name.metric_alerts[each.key].result)
   description = each.value.description
 
-  resource_group_name = coalesce(each.value.resource_group_name, local.resource_group_name)
+  resource_group_name = coalesce(each.value.resource_group_name, var.monitoring_resource_group_name)
   scopes              = each.value.scopes
 
   enabled       = each.value.enabled
